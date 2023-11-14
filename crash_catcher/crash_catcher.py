@@ -68,7 +68,7 @@ def unregister_crash_callback(callback_id: int):
         callback_id: the ID of the callback to unregister as returned by register_crash_callback()
 
     Raises:
-        ValueError if the callback_id is not valid
+        ValueError: if the callback_id is not valid
 
     Note: After a callback is unregisterd, it will not be called if a crash is caught.
     """
@@ -92,8 +92,6 @@ def crash_catcher(
         filename: name of crash dump file to create
         message: message to print to stderr upon crash
         title: title to print to start of crash dump file
-        postamble: message to print to stderr after error, create a crash dump file named filename with exception and stack trace.
-        message is printed to stderr.
         postamble: optional message printed to stderr after crash dump file is created.
         overwrite: if True, overwrite existing file, otherwise increment filename until a non-existent filename is found
         extra: If kwargs provided, any additional arguments to the function will be printed to the crash file.
