@@ -6,9 +6,9 @@ build-backend = "flit_core.buildapi"
 name = "crash-catcher"
 authors = [{ name = "Rhet Turnbull", email = "rturnbull+git@gmail.com" }]
 license = { file = "LICENSE" }
+readme = "README.md"
 classifiers = ["License :: OSI Approved :: MIT License"]
 dynamic = ["version", "description"]
-
 
 [project.optional-dependencies]
 test = ["pytest>=7.4.2", "pytest-cov", "mypy>=1.6.1"]
@@ -19,7 +19,7 @@ docs = [
 ]
 
 [project.urls]
-Home = "https://github.com/RhetTbull/crash_catcher"
+Home = "https://github.com/RhetTbull/crash-catcher"
 
 [tool.flit.module]
 name = "crash_catcher"
