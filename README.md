@@ -138,3 +138,24 @@ Traceback (most recent call last):
     raise ValueError("Oh no, the app has crashed!")
 ValueError: Oh no, the app has crashed!
 ```
+
+## Documentation
+
+See the [documentation](https://rhettbull.github.io/crash-catcher/) for more details.
+
+## License
+
+Crash Catcher is published under the [MIT license](https://mit-license.org/), &copy; 2023, Rhet Turnbull.
+
+## Dependencies
+
+No dependencies outside the standard library.
+
+## Contributing
+
+Contributions of all kinds are welcome!
+
+## See Also
+
+- [error-catcher](https://github.com/Wenzhi-Ding/error_catcher) which provides a similar decorator to improve tracebacks (but not logging to file).
+- [crashreport](https://github.com/Gaming32/crashreport) which provides a way to inject an exception handler that logs to file.
