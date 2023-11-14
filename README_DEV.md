@@ -17,6 +17,7 @@ This project uses [Flit](https://flit.readthedocs.io/en/latest/).  It is a simpl
 Testing uses pytest. Use --doctest-glob to include the README.md file.
 
 - `pytest --doctest-glob="*.md"`
+- `mypy crash_catcher`
 
 ## Building
 
