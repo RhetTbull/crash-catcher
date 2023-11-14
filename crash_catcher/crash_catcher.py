@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import datetime
 import functools
+import os
 import pathlib
 import platform
 import sys
@@ -78,12 +79,12 @@ def unregister_crash_callback(callback_id: int):
 
 
 def crash_catcher(
-    filename: str,
+    filename: str | pathlib.Path | os.PathLike,
     message: str,
     title: str,
     postamble: str | None = None,
     overwrite: bool = True,
-    **extra: dict[str:Any],
+    **extra: Any,
 ):
     """Catch crash (uncaught exception) and create a crash dump file on error named filename
 
@@ -105,7 +106,9 @@ def crash_catcher(
         This filename will be used to render the {filename} template.
     """
 
-    filename = pathlib.Path(filename)
+    filename = (
+        pathlib.Path(filename) if not isinstance(filename, pathlib.Path) else filename
+    )
     filename = filename.resolve()
 
     class Default(dict):
