@@ -1,0 +1,25 @@
+[build-system]
+requires = ["flit_core >=3.2,<4"]
+build-backend = "flit_core.buildapi"
+
+[project]
+name = "crash-catcher"
+authors = [{ name = "Rhet Turnbull", email = "rturnbull+git@gmail.com" }]
+license = { file = "LICENSE" }
+classifiers = ["License :: OSI Approved :: MIT License"]
+dynamic = ["version", "description"]
+
+
+[project.optional-dependencies]
+test = ["pytest>=7.4.2", "pytest-cov", "mypy>=1.6.1"]
+docs = [
+    "mkdocs>=1.4.2",
+    "mkdocs-material>=9.0.13",
+    "mkdocstrings-python>=0.8.3",
+]
+
+[project.urls]
+Home = "https://github.com/RhetTbull/crash_catcher"
+
+[tool.flit.module]
+name = "crash_catcher"
