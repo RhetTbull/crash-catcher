@@ -27,6 +27,13 @@ __all__ = [
 ]
 
 
+def _reset_crash_catcher():
+    """Reset crash catcher state for testing"""
+    global _global_crash_data, _global_callbacks
+    _global_crash_data = {}
+    _global_callbacks = {}
+
+
 def set_crash_data(key_: Any, data: Any):
     """Set data to be printed in crash log"""
     _global_crash_data[key_] = data
@@ -74,7 +81,7 @@ def crash_catcher(
     filename: str,
     message: str,
     title: str,
-    postamble: str | None,
+    postamble: str | None = None,
     overwrite: bool = True,
     **extra: dict[str:Any],
 ):
@@ -84,9 +91,9 @@ def crash_catcher(
         filename: name of crash dump file to create
         message: message to print to stderr upon crash
         title: title to print to start of crash dump file
-        postamble: message to print to stderr after On error, create a crash dump file named filename with exception and stack trace.
+        postamble: message to print to stderr after error, create a crash dump file named filename with exception and stack trace.
         message is printed to stderr.
-        postamble is printed to stderr after crash dump file is created.
+        postamble: optional message printed to stderr after crash dump file is created.
         overwrite: if True, overwrite existing file, otherwise increment filename until a non-existent filename is found
         extra: If kwargs provided, any additional arguments to the function will be printed to the crash file.
 
@@ -100,22 +107,15 @@ def crash_catcher(
 
     filename = pathlib.Path(filename)
     filename = filename.resolve()
-    if filename.exists() and not overwrite:
-        filename = _increment_filename(filename)
 
-    # handle any templates in message and title
-    # currently, only supported template is {filename}
     class Default(dict):
         def __missing__(self, key):
             return key
 
-    message = message.format_map(Default(filename=filename))
-    title = title.format_map(Default(filename=filename))
-    postamble = postamble.format_map(Default(filename=filename))
-
     def decorated(func):
         @functools.wraps(func)
         def wrapped(*args, **kwargs):
+            nonlocal filename, message, title, postamble
             caller = sys._getframe().f_back.f_code.co_name
             name = func.__name__
             timestamp = datetime.datetime.now().isoformat()
@@ -124,6 +124,19 @@ def crash_catcher(
                 return func(*args, **kwargs)
             except Exception as e:
                 stop_t = time.perf_counter()
+
+                # if filename needs to be incremented, do so now
+                # then update message, title, and postamble {filename} template
+                if filename.exists() and not overwrite:
+                    filename = _increment_filename(filename)
+                message = message.format_map(Default(filename=filename))
+                title = title.format_map(Default(filename=filename))
+                postamble = (
+                    postamble.format_map(Default(filename=filename))
+                    if postamble
+                    else ""
+                )
+
                 print(message, file=sys.stderr)
                 print(f"{e}", file=sys.stderr)
 
@@ -178,11 +191,12 @@ def _increment_filename(filename: str | pathlib.Path) -> pathlib.Path:
     filename = pathlib.Path(filename)
     if not filename.exists():
         return filename
+    parent = filename.parent
     stem = filename.stem
     suffix = filename.suffix
     i = 1
     while True:
-        new_filename = pathlib.Path(f"{stem} ({i}){suffix}")
+        new_filename = parent / pathlib.Path(f"{stem} ({i}){suffix}")
         if not new_filename.exists():
             return new_filename
         i += 1

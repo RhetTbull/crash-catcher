@@ -71,9 +71,9 @@ Import `crash_catcher` and apply the decorator to your main function. The decora
 - `filename`: The name of the file to write the crash log to.
 - `message`: The message to display to the user when the app crashes.
 - `title`: The title of the message box displayed to the user.
-- `postamble`: Text to display to the user after the message.
+- `postamble`: Optional text to display to the user after the message. Defaults to None.
 - `overwrite`: Whether to overwrite the crash log file if it already exists. If False, the crash filename will be incremented until a non-existent filename is found. Defaults to False.
-- `extra`: An optional dictionary of extra data to include in the crash log.
+- `**extra`: Optional **kwargs of extra data to include in the crash log.
 
 For example:
 
@@ -86,7 +86,7 @@ from crash_catcher import crash_catcher
     title="Crash catcher demo",
     postamble="Please file a bug report with contents of '{filename}'",
     overwrite=True,
-    extra={"extra": "data"},
+    extra="data",
 )
 def main():
     # do stuff

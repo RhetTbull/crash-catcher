@@ -14,7 +14,8 @@ from .crash_catcher import (
     title="Crash catcher demo",
     postamble="Please file a bug report with contents of '{filename}'",
     overwrite=True,
-    extra={"extra": "data"},
+    extra1="xyzzy",
+    extra2="fizzbuzz",
 )
 def demo_crash_catcher():
     """Demo crash_catcher decorator"""
